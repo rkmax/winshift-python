@@ -18,7 +18,7 @@ from divvy.modules.screen import ScreenData
                 height=1080,
                 layout="horizontal",
             ),
-            "0,0,{width},{height}",
+            "{x},{y},{width},{height}",
             None,
             CalculatedLayout(
                 x=0,
@@ -36,7 +36,7 @@ from divvy.modules.screen import ScreenData
                 height=1080,
                 layout="horizontal",
             ),
-            "0,0,{width}/2,{height}",
+            "{x},{y},{width}/2,{height}",
             None,
             CalculatedLayout(
                 x=0,
@@ -54,7 +54,7 @@ from divvy.modules.screen import ScreenData
                 height=1080,
                 layout="horizontal",
             ),
-            "0,0,{width},{height}",
+            "{x},{y},{width},{height}",
             BarHeight(10, 10, 10, 10),
             CalculatedLayout(
                 x=10,

@@ -26,31 +26,31 @@ class CalculatedLayout:
     height: int
 
 
-DEFAULT_LAYOUT = LayoutData(
+DEFAULT_LAYOUTS_DATA = LayoutData(
     horizontal={
-        "full-size": "0,0,{width},{height}",
-        "half-left": "0,0,{width}/2,{height}",
-        "half-right": "{width}/2,0,{width}/2,{height}",
-        "top-left": "0,0,{width}/2,{height}/2",
-        "top-right": "{width}/2,0,{width}/2,{height}/2",
-        "bottom-left": "0,{height}/2,{width}/2,{height}/2",
+        "full-size": "{x},{y},{width},{height}",
+        "half-left": "{x},{y},{width}/2,{height}",
+        "half-right": "{width}/2,{y},{width}/2,{height}",
+        "top-left": "{x},{y},{width}/2,{height}/2",
+        "top-right": "{width}/2,{y},{width}/2,{height}/2",
+        "bottom-left": "{x},{height}/2,{width}/2,{height}/2",
         "bottom-right": "{width}/2,{height}/2,{width}/2,{height}/2",
-        "two-thirds-left": "0,0,{width}*2/3,{height}",
-        "two-thirds-right": "{width}/3,0,{width}*2/3,{height}",
-        "one-third-left": "0,0,{width}/3,{height}",
-        "one-third-right": "{width}*2/3,0,{width}/3,{height}",
-        "one-third-top-right": "{width}*2/3,0,{width}/3,{height}/2",
+        "two-thirds-left": "{x},{y},{width}*2/3,{height}",
+        "two-thirds-right": "{width}/3,{y},{width}*2/3,{height}",
+        "one-third-left": "{x},{y},{width}/3,{height}",
+        "one-third-right": "{width}*2/3,{y},{width}/3,{height}",
+        "one-third-top-right": "{width}*2/3,{y},{width}/3,{height}/2",
         "one-third-bottom-right": "{width}*2/3,{height}/2,{width}/3,{height}/2",
         "centered-left": "50,{height}*1/6,{width}*3/5,{height}*2/3",
     },
     vertical={
-        "full-size": "0,0,{width},{height}",
-        "half-top": "0,0,{width},{height}/2",
-        "half-bottom": "0,{height}/2,{width},{height}/2",
-        "first-quarter": "0,0,{width},{height}/4",
-        "second-quarter": "0,{height}/4,{width},{height}/4",
-        "third-quarter": "0,{height}/2,{width},{height}/4",
-        "fourth-quarter": "0,{height}*3/4,{width},{height}/4",
+        "full-size": "{x},{y},{width},{height}",
+        "half-top": "{x},{y},{width},{height}/2",
+        "half-bottom": "{x},{height}/2,{width},{height}/2",
+        "first-quarter": "{x},{y},{width},{height}/4",
+        "second-quarter": "{x},{height}/4,{width},{height}/4",
+        "third-quarter": "{x},{height}/2,{width},{height}/4",
+        "fourth-quarter": "{x},{height}*3/4,{width},{height}/4",
     },
 )
 
@@ -77,9 +77,6 @@ def calculate_layout_screen(
     result = CalculatedLayout(
         *[int(eval(value)) for value in calculated_layout.split(",")]
     )
-    # ensure the result is within the screen bounds
-    result.x += bar_height.left
-    result.y += bar_height.top
 
     return result
 
