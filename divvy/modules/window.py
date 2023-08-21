@@ -24,7 +24,7 @@ def _parse_window_data(window_data: List[str]) -> WindowData:
     return WindowData(name, x, y, width, height)
 
 
-def get_active_window_data():
+def get_active_window_data() -> WindowData:
     """Return active window data using xdotool."""
     xdotool = subprocess.Popen(
         ["xdotool", "getactivewindow", "getwindowgeometry"], stdout=subprocess.PIPE
@@ -33,7 +33,7 @@ def get_active_window_data():
     return _parse_window_data(window_info)
 
 
-def resize_reposition_window(window_data: WindowData, layout_data: CalculatedLayout):
+def resize_reposition_window(window_data: WindowData, layout_data: CalculatedLayout) -> None:
     """Resize and reposition the window."""
     subprocess.call(
         [

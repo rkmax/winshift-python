@@ -1,24 +1,23 @@
 import argparse
 import shutil
-from typing import Optional
 
 from divvy.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
 from divvy.modules.screen import get_screens_data, locate_point_on_screen, ScreenData
 from divvy.modules.window import get_active_window_data, resize_reposition_window
 
 
-def _check_external_dependencies():
+def _check_external_dependencies() -> None:
     _check_external_dependency("xrandr")
     _check_external_dependency("xprop")
 
 
-def _check_external_dependency(name: str):
+def _check_external_dependency(name: str) -> None:
     """Check if an external dependency (command) is installed."""
     if shutil.which(name) is None:
         raise RuntimeError(f"{name} is not installed")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Divvy")
 
     parser.add_argument("layout_name", type=str, help="Name of the layout to use")

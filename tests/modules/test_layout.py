@@ -70,7 +70,7 @@ def test_calculate_layout_screen(
     layout_str: str,
     bar_height: Optional[BarHeight],
     expected: CalculatedLayout,
-):
+) -> None:
     result = layout.calculate_layout_screen(
         screen_data,
         layout_str,
