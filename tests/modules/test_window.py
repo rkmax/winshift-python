@@ -20,7 +20,3 @@ def test_get_active_window_data(mocker: MockFixture) -> None:
     expected = WindowData(name="123731979", x=3953, y=1833, width=2160, height=960)
 
     assert result == expected
-
-
-def test_resize_window(mocker: MockFixture) -> None:
-    pass  # Placeholder for future tests in case we want to test this function
