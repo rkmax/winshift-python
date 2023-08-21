@@ -78,3 +78,26 @@ def test_calculate_layout_screen(
     )
 
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "layout_str",
+    [
+        "0,0,{width}/2",
+        "af,0,0,4",
+    ],
+)
+def test_calculate_layout_screen_invalid_layout(layout_str: str) -> None:
+    with pytest.raises(ValueError):
+        layout.calculate_layout_screen(
+            ScreenData(
+                name="DP-0",
+                x=0,
+                y=0,
+                width=1920,
+                height=1080,
+                layout="horizontal",
+            ),
+            layout_str,
+            None,
+        )
