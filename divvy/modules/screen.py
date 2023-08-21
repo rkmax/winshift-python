@@ -35,14 +35,31 @@ def get_screens_data() -> List[ScreenData]:
     return [_parse_screen_data(monitor.split()) for monitor in monitors]
 
 
-def get_screen_of_window(
-    screens_data: List[ScreenData], window_data: dict
+def locate_point_on_screen(
+    screens: List[ScreenData], x: int, y: int
 ) -> Optional[ScreenData]:
-    """Return the screen where the window is located using x,y of the window."""
-    for screen in screens_data:
-        screen_width = screen["width"] + screen["x"]
-        screen_height = screen["height"] + screen["y"]
-        window_is_x_in_screen = screen["x"] < window_data["x"] + 1 < screen_width
-        window_is_y_in_screen = screen["y"] < window_data["y"] + 1 < screen_height
-        if window_is_y_in_screen and window_is_x_in_screen:
+    """Return the screen where the point is located."""
+    horizontal_matches = []
+    vertical_matches = []
+    # try to match both horizontal and vertical
+    for screen in screens:
+        screen_left = screen.x
+        screen_top = screen.y
+        screen_right = screen.x + screen.width
+        screen_bottom = screen.y + screen.height
+
+        if screen_left <= x <= screen_right:
+            horizontal_matches.append(screen)
+        if screen_top <= y <= screen_bottom:
+            vertical_matches.append(screen)
+
+        if screen_left <= x <= screen_right and screen_top <= y <= screen_bottom:
             return screen
+
+    # if no match, try to match only horizontal or vertical
+    if horizontal_matches:
+        return horizontal_matches[0]
+    elif vertical_matches:
+        return vertical_matches[0]
+
+    return None

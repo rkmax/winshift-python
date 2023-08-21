@@ -1,3 +1,4 @@
+import pytest
 from pytest_mock import MockFixture
 from divvy.modules import screen
 from divvy.modules.screen import ScreenData
@@ -36,3 +37,37 @@ def test_get_screens_data(mocker: MockFixture) -> None:
     ]
 
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "x, y, expected",
+    [
+        (3840, 0, "DP-0"),
+        (2160, 973, "DP-0"),
+        (49, 1093, "DP-2"),
+        (2160, 2031, "DP-0"),
+    ],
+)
+def test_locate_point_on_screen(x: int, y: int, expected: str) -> None:
+    screens = [
+        ScreenData(
+            name="DP-0",
+            x=2160,
+            y=973,
+            width=3840,
+            height=2160,
+            layout="horizontal",
+        ),
+        ScreenData(
+            name="DP-2",
+            x=0,
+            y=0,
+            width=2160,
+            height=3840,
+            layout="vertical",
+        ),
+    ]
+
+    result = screen.locate_point_on_screen(screens, x, y)
+
+    assert result.name == expected
