@@ -62,7 +62,6 @@ ipython_config.py
 
 # poetry
 # Note: Consider also adding the `pypoetry.toml` file if you've customized the build backend.
-.pytest_cache/
 poetry.lock
 
 # Environments
