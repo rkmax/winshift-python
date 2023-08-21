@@ -20,7 +20,7 @@ def _check_external_dependency(name: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Divvy")
 
-    parser.add_argument("layout_name", type=str, help="Name of the layout to use")
+    parser.add_argument("layout_name", type=str, nargs="?", help="Name of the layout to use")
     parser.add_argument(
         "screen_name",
         type=str,
@@ -28,8 +28,19 @@ def main() -> None:
         default=None,
         help="Name of the screen to use (optional). if not provided, screen will be chosen automatically",
     )
+    parser.add_argument('--list-layouts', action='store_true', help='List available layouts')
 
     args = parser.parse_args()
+
+    if args.list_layouts:
+        print("horizontal layouts:")
+        for layout in DEFAULT_LAYOUTS_DATA.horizontal:
+            print(f"  {layout}")
+        print("vertical layouts:")
+        for layout in DEFAULT_LAYOUTS_DATA.vertical:
+            print(f"  {layout}")
+        return
+
     window_data = get_active_window_data()
     screens_data = get_screens_data()
 
