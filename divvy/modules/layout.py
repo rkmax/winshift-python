@@ -59,12 +59,7 @@ def calculate_layout_screen(
     screen_data: ScreenData, layout: str, bar_height: Optional[BarHeight] = None
 ) -> CalculatedLayout:
     """Return the calculated layout for the given screen."""
-
-    if not _validate_layout(layout):
-        raise ValueError(
-            "Invalid layout format. int,int,int,int expected. {width} and {height} are available."
-        )
-
+    validate_layout(layout)
     bar_height = bar_height or BarHeight(0, 0, 0, 0)
     screen_data_dict = asdict(screen_data)
     screen_data_dict["x"] += bar_height.left
@@ -81,7 +76,7 @@ def calculate_layout_screen(
     return result
 
 
-def _validate_layout(layout: str) -> bool:
+def validate_layout(layout: str) -> None:
     """Return True if the layout is valid int,int,int,int str format"""
     try:
         x, y, width, height = layout.format(
@@ -96,8 +91,7 @@ def _validate_layout(layout: str) -> bool:
         int(eval(y))
         int(eval(width))
         int(eval(height))
-        return True
-    except ValueError:
-        return False
-    except NameError:
-        return False
+    except Exception:
+        raise ValueError(
+            "Invalid layout format. int,int,int,int expected. {width} and {height} are available."
+        )
