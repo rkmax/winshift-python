@@ -2,6 +2,8 @@ import subprocess
 from dataclasses import dataclass
 from typing import List
 
+from divvy.modules.layout import CalculatedLayout
+
 
 @dataclass
 class WindowData:
@@ -31,23 +33,23 @@ def get_active_window_data():
     return _parse_window_data(window_info)
 
 
-def resize_reposition_window(window_data, layout_data):
+def resize_reposition_window(window_data: WindowData, layout_data: CalculatedLayout):
     """Resize and reposition the window."""
     subprocess.call(
         [
             "xdotool",
             "windowsize",
-            window_data["name"],
-            str(layout_data["width"]),
-            str(layout_data["height"]),
+            window_data.name,
+            str(layout_data.width),
+            str(layout_data.height),
         ]
     )
     subprocess.call(
         [
             "xdotool",
             "windowmove",
-            window_data["name"],
-            str(layout_data["x"]),
-            str(layout_data["y"]),
+            window_data.name,
+            str(layout_data.x),
+            str(layout_data.y),
         ]
     )
