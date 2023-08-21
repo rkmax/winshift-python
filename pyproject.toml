@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "divvy"
+version = "0.1.0"
+description = ""
+authors = ["Julian reyes Escrigas <julian.reyes.escrigas@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+black = "^23.7.0"
+pytest-mock = "^3.11.1"
+
+[tools.poetry.scripts]
+divvy = "divvy.cli:main"
+test = "pytest -v -s"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
