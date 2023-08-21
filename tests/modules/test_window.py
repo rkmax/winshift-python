@@ -1,6 +1,7 @@
 from pytest_mock import MockFixture
 
 from divvy.modules import window
+from divvy.modules.window import WindowData
 
 
 def test_get_active_window_data(mocker: MockFixture) -> None:
@@ -16,13 +17,7 @@ def test_get_active_window_data(mocker: MockFixture) -> None:
 
     result = window.get_active_window_data()
 
-    expected = {
-        "name": "123731979",
-        "x": 3953,
-        "y": 1833,
-        "width": 2160,
-        "height": 960,
-    }
+    expected = WindowData(name="123731979", x=3953, y=1833, width=2160, height=960)
 
     assert result == expected
 
