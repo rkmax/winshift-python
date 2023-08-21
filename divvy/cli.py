@@ -1,9 +1,92 @@
 import argparse
+import os
 import shutil
+from typing import Optional
 
+from divvy.modules.config import add_layout
 from divvy.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
 from divvy.modules.screen import get_screens_data, locate_point_on_screen
 from divvy.modules.window import get_active_window_data, resize_reposition_window
+
+
+class AppCLI:
+    def __init__(self):
+        self.parser = argparse.ArgumentParser(description="Divvy")
+        subparsers = self.parser.add_subparsers(dest="command")
+        # list_layouts_parser
+        subparsers.add_parser("list-layouts", help="List available layouts")
+        # change_layout_parser
+        change_layout_parser = subparsers.add_parser("change-layout", help="Change layout")
+        change_layout_parser.add_argument("layout_name", type=str, nargs="?", help="Name of the layout to use")
+        change_layout_parser.add_argument(
+            "screen_name",
+            type=str,
+            nargs="?",
+            default=None,
+            help="Name of the screen to use (optional). if not provided, screen will be chosen automatically",
+        )
+        # add_layout_parser
+        add_layout_parser = subparsers.add_parser("add-layout", help="Add a new layout")
+        add_layout_parser.add_argument("--direction", type=str, help="horizontal layout")
+        add_layout_parser.add_argument("layout_name", type=str, help="Name of the layout")
+        add_layout_parser.add_argument(
+            'layout_str',
+            type=str,
+            help="layout string in the format ({x},{y},{width},{height})"
+        )
+
+    def run(self):
+        args = self.parser.parse_args()
+        if args.command == "list-layouts":
+            self.list_layouts()
+        elif args.command == "change-layout":
+            self.change_layout(args.layout_name, args.screen_name)
+        elif args.command == "add-layout":
+            self.add_layout(args.layout_name, args.layout_str, args.direction)
+
+    @staticmethod
+    def list_layouts() -> None:
+        print("horizontal layouts:")
+        for layout in DEFAULT_LAYOUTS_DATA.horizontal:
+            print(f"  {layout}")
+        print("vertical layouts:")
+        for layout in DEFAULT_LAYOUTS_DATA.vertical:
+            print(f"  {layout}")
+
+    @staticmethod
+    def change_layout(layout_name: str, screen_name: Optional[str] = None) -> None:
+        window_data = get_active_window_data()
+        screens_data = get_screens_data()
+
+        if screen_name:
+            target_screen = next(
+                (screen for screen in screens_data if screen.name == args.screen_name), None
+            )
+        else:
+            target_screen = locate_point_on_screen(screens_data, window_data.x, window_data.y)
+
+        if target_screen is None:
+            raise RuntimeError(f"Screen {screen_name} not found")
+
+        if layout_name in DEFAULT_LAYOUTS_DATA.horizontal:
+            layout_str = DEFAULT_LAYOUTS_DATA.horizontal[layout_name]
+        elif layout_name in DEFAULT_LAYOUTS_DATA.vertical:
+            layout_str = DEFAULT_LAYOUTS_DATA.vertical[layout_name]
+        else:
+            raise RuntimeError(f"Layout {layout_name} not found for {target_screen.layout}")
+
+        new_window_layout = calculate_layout_screen(target_screen, layout_str)
+        resize_reposition_window(window_data, new_window_layout)
+        print('Screen "{}"'.format(target_screen))
+        print('Layout "{}" applied to screen "{}"'.format(layout_str, target_screen.name))
+        print('Window resized and repositioned {}'.format(new_window_layout))
+
+    def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
+        add_layout(self._get_config_path(), layout_name, layout_str, direction)
+
+    @staticmethod
+    def _get_config_path():
+        return os.path.expanduser("~/.config/divvy/config.toml")
 
 
 def _check_external_dependencies() -> None:
@@ -18,54 +101,8 @@ def _check_external_dependency(name: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Divvy")
-
-    parser.add_argument("layout_name", type=str, nargs="?", help="Name of the layout to use")
-    parser.add_argument(
-        "screen_name",
-        type=str,
-        nargs="?",
-        default=None,
-        help="Name of the screen to use (optional). if not provided, screen will be chosen automatically",
-    )
-    parser.add_argument('--list-layouts', action='store_true', help='List available layouts')
-
-    args = parser.parse_args()
-
-    if args.list_layouts:
-        print("horizontal layouts:")
-        for layout in DEFAULT_LAYOUTS_DATA.horizontal:
-            print(f"  {layout}")
-        print("vertical layouts:")
-        for layout in DEFAULT_LAYOUTS_DATA.vertical:
-            print(f"  {layout}")
-        return
-
-    window_data = get_active_window_data()
-    screens_data = get_screens_data()
-
-    if args.screen_name:
-        target_screen = next(
-            (screen for screen in screens_data if screen.name == args.screen_name), None
-        )
-    else:
-        target_screen = locate_point_on_screen(screens_data, window_data.x, window_data.y)
-
-    if target_screen is None:
-        raise RuntimeError(f"Screen {args.screen_name} not found")
-
-    if args.layout_name in DEFAULT_LAYOUTS_DATA.horizontal:
-        layout_str = DEFAULT_LAYOUTS_DATA.horizontal[args.layout_name]
-    elif args.layout_name in DEFAULT_LAYOUTS_DATA.vertical:
-        layout_str = DEFAULT_LAYOUTS_DATA.vertical[args.layout_name]
-    else:
-        raise RuntimeError(f"Layout {args.layout_name} not found for {target_screen.layout}")
-
-    new_window_layout = calculate_layout_screen(target_screen, layout_str)
-    resize_reposition_window(window_data, new_window_layout)
-    print('Screen "{}"'.format(target_screen))
-    print('Layout "{}" applied to screen "{}"'.format(layout_str, target_screen.name))
-    print('Window resized and repositioned {}'.format(new_window_layout))
+    app = AppCLI()
+    app.run()
 
 
 if __name__ == "__main__":
