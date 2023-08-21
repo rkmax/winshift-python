@@ -12,6 +12,7 @@ python = "^3.11"
 pytest = "^7.4.0"
 black = "^23.7.0"
 pytest-mock = "^3.11.1"
+pytest-cov = "^4.1.0"
 
 [tools.poetry.scripts]
 divvy = "divvy.cli:main"
