@@ -15,7 +15,6 @@ pytest-mock = "^3.11.1"
 
 [tools.poetry.scripts]
 divvy = "divvy.cli:main"
-test = "pytest -v -s"
 
 [build-system]
 requires = ["poetry-core"]
