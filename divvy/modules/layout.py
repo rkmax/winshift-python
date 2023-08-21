@@ -1,3 +1,7 @@
+from dataclasses import asdict
+
+from divvy.modules.screen import ScreenData
+
 SCREEN_LAYOUT = {
     "horizontal": {
         "full-size": "0,0,{width},{height}",
@@ -31,14 +35,15 @@ SCREEN_LAYOUT = {
 BAR_HEIGHT = {
     "DP-0": {  # ✋ Change this to match your screen name
         "top": 0,
-        "bottom": 44,  # ✋ Change this t match you bar height
+        "bottom": 0,  # ✋ Change this t match you bar height
         "left": 0,
         "right": 0,
     }
 }
 
 
-def calculate_layout_screen(screen_data, layout_name):
+def calculate_layout_screen(screen_data: ScreenData, layout_name: str) -> dict:
+    screen_data = asdict(screen_data)
     """Return the layout of the screen."""
     if screen_data["name"] in BAR_HEIGHT:
         bar = BAR_HEIGHT[screen_data["name"]]
@@ -50,14 +55,10 @@ def calculate_layout_screen(screen_data, layout_name):
     calc_layout = SCREEN_LAYOUT[screen_data["layout"]][layout_name].format(
         **screen_data
     )
+
     return {
         "x": eval(calc_layout.split(",")[0]) + screen_data["x"],
         "y": eval(calc_layout.split(",")[1]) + screen_data["y"],
         "width": eval(calc_layout.split(",")[2]),
         "height": eval(calc_layout.split(",")[3]),
     }
-
-
-def get_screen_layout(screen_data):
-    """Return if the screen is horizontal or vertical oriented."""
-    return "horizontal" if screen_data["width"] > screen_data["height"] else "vertical"

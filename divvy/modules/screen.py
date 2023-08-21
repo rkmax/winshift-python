@@ -1,32 +1,43 @@
+from dataclasses import dataclass
 import subprocess
-
-from divvy.modules.layout import get_screen_layout
-
-
-def _get_screen_data_map(monitoring_data):
-    """Return a dictionary of screen data."""
-    info = {
-        "name": monitoring_data[3],
-        "x": int(monitoring_data[2].split("+")[1]),
-        "y": int(monitoring_data[2].split("+")[2]),
-        "width": int(monitoring_data[2].split("+")[0].split("x")[0].split("/")[0]),
-        "height": int(monitoring_data[2].split("+")[0].split("x")[1].split("/")[0]),
-    }
-
-    info["layout"] = get_screen_layout(info)
-    return info
+from typing import List, Optional
 
 
-def get_screens_data():
+@dataclass
+class ScreenData:
+    name: str
+    x: int
+    y: int
+    width: int
+    height: int
+    layout: str
+
+
+def _parse_screen_data(screen_data: List[str]) -> ScreenData:
+    """Return screen data from xrandr output."""
+
+    name = screen_data[3]
+    x = int(screen_data[2].split("+")[1])
+    y = int(screen_data[2].split("+")[2])
+    width = int(screen_data[2].split("+")[0].split("x")[0].split("/")[0])
+    height = int(screen_data[2].split("+")[0].split("x")[1].split("/")[0])
+    layout = "horizontal" if width > height else "vertical"
+
+    return ScreenData(name, x, y, width, height, layout)
+
+
+def get_screens_data() -> List[ScreenData]:
     """Return screen data using xrandr."""
     xrandr = subprocess.Popen(
         ["xrandr", "--listactivemonitors"], stdout=subprocess.PIPE
     )
     monitors = xrandr.stdout.read().decode("utf-8").split("\n")[1:-1]
-    return [_get_screen_data_map(monitor.split()) for monitor in monitors]
+    return [_parse_screen_data(monitor.split()) for monitor in monitors]
 
 
-def get_screen_of_window(screens_data, window_data):
+def get_screen_of_window(
+    screens_data: List[ScreenData], window_data: dict
+) -> Optional[ScreenData]:
     """Return the screen where the window is located using x,y of the window."""
     for screen in screens_data:
         screen_width = screen["width"] + screen["x"]
