@@ -2,7 +2,7 @@ import argparse
 import shutil
 
 from divvy.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
-from divvy.modules.screen import get_screens_data, locate_point_on_screen, ScreenData
+from divvy.modules.screen import get_screens_data, locate_point_on_screen
 from divvy.modules.window import get_active_window_data, resize_reposition_window
 
 
