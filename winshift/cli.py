@@ -17,9 +17,10 @@ class AppCLI:
         subparsers.add_parser("list-layouts", help="List available layouts")
         # change_layout_parser
         change_layout_parser = subparsers.add_parser("change-layout", help="Change layout")
+        change_layout_parser.add_argument('--dry-run', action='store_true', help='Do not change layout')
         change_layout_parser.add_argument("layout_name", type=str, nargs="?", help="Name of the layout to use")
         change_layout_parser.add_argument(
-            "screen_name",
+            "--screen-name",
             type=str,
             nargs="?",
             default=None,
@@ -36,13 +37,18 @@ class AppCLI:
         )
 
     def run(self):
-        args = self.parser.parse_args()
-        if args.command == "list-layouts":
-            self.list_layouts()
-        elif args.command == "change-layout":
-            self.change_layout(args.layout_name, args.screen_name)
-        elif args.command == "add-layout":
-            self.add_layout(args.layout_name, args.layout_str, args.direction)
+        try:
+            args = self.parser.parse_args()
+            if args.command == "list-layouts":
+                self.list_layouts()
+            elif args.command == "change-layout":
+                self.change_layout(args.layout_name, args.screen_name, args.dry_run)
+            elif args.command == "add-layout":
+                self.add_layout(args.layout_name, args.layout_str, args.direction)
+        except Exception as e:
+            print(e)
+            self.parser.print_help()
+
 
     @staticmethod
     def list_layouts() -> None:
@@ -54,13 +60,13 @@ class AppCLI:
             print(f"  {layout}")
 
     @staticmethod
-    def change_layout(layout_name: str, screen_name: Optional[str] = None) -> None:
+    def change_layout(layout_name: str, screen_name: Optional[str] = None, dry_run: bool = False) -> None:
         window_data = get_active_window_data()
         screens_data = get_screens_data()
 
         if screen_name:
             target_screen = next(
-                (screen for screen in screens_data if screen.name == args.screen_name), None
+                (screen for screen in screens_data if screen.name == screen_name), None
             )
         else:
             target_screen = locate_point_on_screen(screens_data, window_data.x, window_data.y)
@@ -68,17 +74,19 @@ class AppCLI:
         if target_screen is None:
             raise RuntimeError(f"Screen {screen_name} not found")
 
-        if layout_name in DEFAULT_LAYOUTS_DATA.horizontal:
+        if target_screen.layout == 'horizontal' and layout_name in DEFAULT_LAYOUTS_DATA.horizontal:
             layout_str = DEFAULT_LAYOUTS_DATA.horizontal[layout_name]
-        elif layout_name in DEFAULT_LAYOUTS_DATA.vertical:
+        elif target_screen.layout == 'vertical' and layout_name in DEFAULT_LAYOUTS_DATA.vertical:
             layout_str = DEFAULT_LAYOUTS_DATA.vertical[layout_name]
         else:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.layout}")
 
         new_window_layout = calculate_layout_screen(target_screen, layout_str)
-        resize_reposition_window(window_data, new_window_layout)
+        if not dry_run:
+            resize_reposition_window(window_data, new_window_layout)
         print('Screen "{}"'.format(target_screen))
         print('Layout "{}" applied to screen "{}"'.format(layout_str, target_screen.name))
+        print('Window "{}"'.format(window_data))
         print('Window resized and repositioned {}'.format(new_window_layout))
 
     def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
