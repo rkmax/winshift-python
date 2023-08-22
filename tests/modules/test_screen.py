@@ -1,7 +1,7 @@
 import pytest
 from pytest_mock import MockFixture
-from divvy.modules import screen
-from divvy.modules.screen import ScreenData
+from winshift.modules import screen
+from winshift.modules.screen import ScreenData
 
 
 def test_get_screens_data(mocker: MockFixture) -> None:

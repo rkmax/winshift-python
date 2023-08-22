@@ -2,7 +2,7 @@ import subprocess
 from dataclasses import dataclass
 from typing import List
 
-from divvy.modules.layout import CalculatedLayout
+from winshift.modules.layout import CalculatedLayout
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from pytest_mock import MockFixture
 
-from divvy.modules import window
-from divvy.modules.window import WindowData
+from winshift.modules import window
+from winshift.modules.window import WindowData
 
 
 def test_get_active_window_data(mocker: MockFixture) -> None:

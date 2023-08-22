@@ -1,7 +1,7 @@
 import os
 
 import toml
-from divvy.modules.layout import LayoutData, validate_layout
+from winshift.modules.layout import LayoutData, validate_layout
 
 
 def load_layouts(config_path: str) -> LayoutData:

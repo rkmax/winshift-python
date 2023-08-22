@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "divvy"
+name = "winshift"
 version = "0.1.0"
 description = ""
 authors = ["Julian reyes Escrigas <julian.reyes.escrigas@gmail.com>"]
@@ -17,7 +17,7 @@ pytest-mock = "^3.11.1"
 pytest-cov = "^4.1.0"
 
 [tools.poetry.scripts]
-divvy = "divvy.cli:main"
+winshift = "winshift.cli:main"
 
 [build-system]
 requires = ["poetry-core"]

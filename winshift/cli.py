@@ -3,10 +3,10 @@ import os
 import shutil
 from typing import Optional
 
-from divvy.modules.config import add_layout
-from divvy.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
-from divvy.modules.screen import get_screens_data, locate_point_on_screen
-from divvy.modules.window import get_active_window_data, resize_reposition_window
+from winshift.modules.config import add_layout
+from winshift.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
+from winshift.modules.screen import get_screens_data, locate_point_on_screen
+from winshift.modules.window import get_active_window_data, resize_reposition_window
 
 
 class AppCLI:
@@ -86,7 +86,7 @@ class AppCLI:
 
     @staticmethod
     def _get_config_path():
-        return os.path.expanduser("~/.config/divvy/config.toml")
+        return os.path.expanduser("~/.config/winshift/config.toml")
 
 
 def _check_external_dependencies() -> None:

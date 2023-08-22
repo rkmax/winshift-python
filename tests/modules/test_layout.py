@@ -1,9 +1,9 @@
 from typing import Optional
 
 import pytest
-from divvy.modules import layout
-from divvy.modules.layout import CalculatedLayout, BarHeight
-from divvy.modules.screen import ScreenData
+from winshift.modules import layout
+from winshift.modules.layout import CalculatedLayout, BarHeight
+from winshift.modules.screen import ScreenData
 
 
 @pytest.mark.parametrize(

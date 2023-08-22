@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass
 from typing import Dict, Optional
 
-from divvy.modules.screen import ScreenData
+from winshift.modules.screen import ScreenData
 
 
 @dataclass
