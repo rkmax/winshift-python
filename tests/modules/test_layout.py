@@ -59,8 +59,8 @@ from winshift.modules.screen import ScreenData
             CalculatedLayout(
                 x=10,
                 y=10,
-                width=1900,
-                height=1060,
+                width=1910,
+                height=1070,
             ),
         ),
     ],
