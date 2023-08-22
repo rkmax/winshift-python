@@ -15,4 +15,4 @@ WinShift is an innovative tool that allows users to move and organize windows wi
 2. clone this repository
 3. navigate to the repository folder and run `poetry install`
 
-1: https://python-poetry.org/docs/#installation
+[1]: https://python-poetry.org/docs/#installation
