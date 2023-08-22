@@ -70,10 +70,33 @@ def calculate_layout_screen(
 
     # ensure to apply bar_height and screen offsets
     bar_height = bar_height or BarHeight(0, 0, 0, 0)
-    result.x += screen_data.x + bar_height.left
-    result.y += screen_data.y + bar_height.top
-    result.width -= bar_height.right
-    result.height -= bar_height.bottom
+
+    if result.x < bar_height.left:
+        # calculate the difference
+        diff = bar_height.left - result.x
+        # apply the difference to the width
+        result.x += diff
+    if result.y < bar_height.top:
+        # calculate the difference
+        diff = bar_height.top - result.y
+        # apply the difference to the height
+        result.y += diff
+
+    if result.width > screen_data.width - bar_height.right:
+        # calculate the difference
+        diff = result.width - (screen_data.width - bar_height.right)
+        # apply the difference to the width
+        result.width -= diff
+
+    if result.height > screen_data.height - bar_height.bottom:
+        # calculate the difference
+        diff = result.height - (screen_data.height - bar_height.bottom)
+        # apply the difference to the height
+        result.height -= diff
+
+    # always apply screen offsets
+    result.x += screen_data.x
+    result.y += screen_data.y
 
     return result
 
