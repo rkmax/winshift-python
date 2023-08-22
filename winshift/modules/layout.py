@@ -28,29 +28,29 @@ class CalculatedLayout:
 
 DEFAULT_LAYOUTS_DATA = LayoutData(
     horizontal={
-        "full-size": "{x},{y},{width},{height}",
-        "half-left": "{x},{y},{width}/2,{height}",
-        "half-right": "{width}/2,{y},{width}/2,{height}",
-        "top-left": "{x},{y},{width}/2,{height}/2",
-        "top-right": "{width}/2,{y},{width}/2,{height}/2",
-        "bottom-left": "{x},{height}/2,{width}/2,{height}/2",
+        "full-size": "0,0,{width},{height}",
+        "half-left": "0,0,{width}/2,{height}",
+        "half-right": "{width}/2,0,{width}/2,{height}",
+        "top-left": "0,0,{width}/2,{height}/2",
+        "top-right": "{width}/2,0,{width}/2,{height}/2",
+        "bottom-left": "0,{height}/2,{width}/2,{height}/2",
         "bottom-right": "{width}/2,{height}/2,{width}/2,{height}/2",
-        "two-thirds-left": "{x},{y},{width}*2/3,{height}",
-        "two-thirds-right": "{width}/3,{y},{width}*2/3,{height}",
-        "one-third-left": "{x},{y},{width}/3,{height}",
-        "one-third-right": "{width}*2/3,{y},{width}/3,{height}",
-        "one-third-top-right": "{width}*2/3,{y},{width}/3,{height}/2",
+        "two-thirds-left": "0,0,{width}*2/3,{height}",
+        "two-thirds-right": "{width}/3,0,{width}*2/3,{height}",
+        "one-third-left": "0,0,{width}/3,{height}",
+        "one-third-right": "{width}*2/3,0,{width}/3,{height}",
+        "one-third-top-right": "{width}*2/3,0,{width}/3,{height}/2",
         "one-third-bottom-right": "{width}*2/3,{height}/2,{width}/3,{height}/2",
         "centered-left": "50,{height}*1/6,{width}*3/5,{height}*2/3",
     },
     vertical={
-        "full-size": "{x},{y},{width},{height}",
-        "half-top": "{x},{y},{width},{height}/2",
-        "half-bottom": "{x},{height}/2,{width},{height}/2",
-        "first-quarter": "{x},{y},{width},{height}/4",
-        "second-quarter": "{x},{height}/4,{width},{height}/4",
-        "third-quarter": "{x},{height}/2,{width},{height}/4",
-        "fourth-quarter": "{x},{height}*3/4,{width},{height}/4",
+        "full-size": "0,0,{width},{height}",
+        "half-top": "0,0,{width},{height}/2",
+        "half-bottom": "0,{height}/2,{width},{height}/2",
+        "first-quarter": "0,0,{width},{height}/4",
+        "second-quarter": "0,{height}/4,{width},{height}/4",
+        "third-quarter": "0,{height}/2,{width},{height}/4",
+        "fourth-quarter": "0,{height}*3/4,{width},{height}/4",
     },
 )
 
@@ -60,18 +60,20 @@ def calculate_layout_screen(
 ) -> CalculatedLayout:
     """Return the calculated layout for the given screen."""
     validate_layout(layout)
-    bar_height = bar_height or BarHeight(0, 0, 0, 0)
     screen_data_dict = asdict(screen_data)
-    screen_data_dict["x"] += bar_height.left
-    screen_data_dict["y"] += bar_height.top
-    screen_data_dict["width"] -= bar_height.left + bar_height.right
-    screen_data_dict["height"] -= bar_height.top + bar_height.bottom
 
     calculated_layout = layout.format(**screen_data_dict)
 
     result = CalculatedLayout(
         *[int(eval(value)) for value in calculated_layout.split(",")]
     )
+
+    # ensure to apply bar_height and screen offsets
+    bar_height = bar_height or BarHeight(0, 0, 0, 0)
+    result.x += screen_data.x + bar_height.left
+    result.y += screen_data.y + bar_height.top
+    result.width -= bar_height.right
+    result.height -= bar_height.bottom
 
     return result
 
