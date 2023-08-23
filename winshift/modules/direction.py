@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class Direction(Enum):
-    VERTICAL = 'vertical'
-    HORIZONTAL = 'horizontal'
+    VERTICAL = "vertical"
+    HORIZONTAL = "horizontal"

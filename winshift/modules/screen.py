@@ -36,9 +36,7 @@ def get_screens_data() -> List[ScreenData]:
         return [_parse_screen_data(monitor.split()) for monitor in monitors]
 
 
-def locate_point_on_screen(
-    screens: List[ScreenData], x: int, y: int
-) -> Optional[ScreenData]:
+def locate_point_on_screen(screens: List[ScreenData], x: int, y: int) -> Optional[ScreenData]:
     """Return the screen where the point is located."""
     horizontal_matches = []
     vertical_matches = []

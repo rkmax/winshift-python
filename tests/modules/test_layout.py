@@ -57,7 +57,7 @@ BAR_HEIGHTS_SET = [
             width=1920,
             height=540,
         ),
-    )
+    ),
 ]
 
 

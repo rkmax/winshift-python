@@ -17,12 +17,8 @@ class AppCLI:
         subparsers.add_parser("list-layouts", help="List available layouts")
         # change_layout_parser
         change_layout_parser = subparsers.add_parser("change-layout", help="Change layout")
-        change_layout_parser.add_argument('--dry-run', action='store_true', help='Do not change layout')
-        change_layout_parser.add_argument(
-            "layout_name",
-            type=str,
-            help="Name of the layout to use"
-        )
+        change_layout_parser.add_argument("--dry-run", action="store_true", help="Do not change layout")
+        change_layout_parser.add_argument("layout_name", type=str, help="Name of the layout to use")
         change_layout_parser.add_argument(
             "--screen-name",
             type=str,
@@ -35,9 +31,9 @@ class AppCLI:
         add_layout_parser.add_argument("--direction", type=str, help="horizontal layout")
         add_layout_parser.add_argument("layout_name", type=str, help="Name of the layout")
         add_layout_parser.add_argument(
-            'layout_str',
+            "layout_str",
             type=str,
-            help="layout string in the format ({x},{y},{width},{height})"
+            help="layout string in the format ({x},{y},{width},{height})",
         )
 
     def run(self):
@@ -70,17 +66,18 @@ class AppCLI:
         screens_data = get_screens_data()
 
         if screen_name:
-            target_screen = next(
-                (screen for screen in screens_data if screen.name == screen_name), None
-            )
+            target_screen = next((screen for screen in screens_data if screen.name == screen_name), None)
         else:
             target_screen = locate_point_on_screen(screens_data, window_data.x, window_data.y)
 
         if target_screen is None:
             raise RuntimeError(f"Screen {screen_name} not found")
 
-        layout = next(layout_listed for layout_listed in DEFAULT_CONFIG.layouts
-                      if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction)
+        layout = next(
+            layout_listed
+            for layout_listed in DEFAULT_CONFIG.layouts
+            if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction
+        )
 
         if not layout:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")
@@ -91,10 +88,10 @@ class AppCLI:
         print(f'Window "{window_data}"')
 
         if dry_run:
-            print(f'Dry run, calculated window layout: {new_window_layout}')
+            print(f"Dry run, calculated window layout: {new_window_layout}")
         else:
             resize_reposition_window(window_data, new_window_layout)
-            print(f'Window resized and repositioned {new_window_layout}')
+            print(f"Window resized and repositioned {new_window_layout}")
 
     def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
         add_layout(self._get_config_path(), layout_name, layout_str, direction)

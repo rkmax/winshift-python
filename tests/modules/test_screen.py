@@ -7,9 +7,7 @@ from winshift.modules.screen import ScreenData
 
 def test_get_screens_data(mocker: MockFixture) -> None:
     mock_output = (
-        "Monitors: 2\n"
-        " 0: +*DP-0 3840/600x2160/340+2160+973  DP-0\n"
-        " 1: +DP-2 2160/600x3840/340+0+0  DP-2\n"
+        "Monitors: 2\n" " 0: +*DP-0 3840/600x2160/340+2160+973  DP-0\n" " 1: +DP-2 2160/600x3840/340+0+0  DP-2\n"
     ).encode("utf-8")
 
     mock_process = mocker.Mock()

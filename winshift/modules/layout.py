@@ -44,9 +44,7 @@ def calculate_layout_screen(
 
     calculated_layout = layout.layout.format(**screen_data_dict)
 
-    result = CalculatedLayout(
-        *[int(eval(value)) for value in calculated_layout.split(",")]
-    )
+    result = CalculatedLayout(*[int(eval(value)) for value in calculated_layout.split(",")])
 
     # ensure to apply bar_height and screen offsets
     bar_height = bar_height or BarHeight(top=0, bottom=0, left=0, right=0, screen_name=screen_data.name)
