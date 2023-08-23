@@ -1,7 +1,39 @@
 import os
+from dataclasses import dataclass
+from typing import List
 
 import toml
-from winshift.modules.layout import LayoutData, validate_layout
+from winshift.modules.layout import LayoutData, validate_layout, BarHeight, Layout
+
+
+@dataclass
+class ConfigData:
+    bar_height: List[BarHeight]
+    layouts: List[Layout]
+
+
+DEFAULT_CONFIG = ConfigData(
+    bar_height=[
+        BarHeight(top=0, bottom=45, left=0, right=0, screen_name="DP-0")
+    ],
+    layouts=[
+        Layout(
+            name="full-size",
+            layout="0,0,{width},{height}",
+            direction="horizontal",
+        ),
+        Layout(
+            name="half-left",
+            layout="0,0,{width}/2,{height}",
+            direction="horizontal",
+        ),
+        Layout(
+            name="half-right",
+            layout="{width}/2,0,{width}/2,{height}",
+            direction="horizontal",
+        ),
+    ]
+)
 
 
 def load_layouts(config_path: str) -> LayoutData:

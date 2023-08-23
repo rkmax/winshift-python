@@ -3,8 +3,8 @@ import os
 import shutil
 from typing import Optional
 
-from winshift.modules.config import add_layout
-from winshift.modules.layout import calculate_layout_screen, DEFAULT_LAYOUTS_DATA
+from winshift.modules.config import add_layout, DEFAULT_CONFIG
+from winshift.modules.layout import calculate_layout_screen
 from winshift.modules.screen import get_screens_data, locate_point_on_screen
 from winshift.modules.window import get_active_window_data, resize_reposition_window
 
@@ -18,7 +18,11 @@ class AppCLI:
         # change_layout_parser
         change_layout_parser = subparsers.add_parser("change-layout", help="Change layout")
         change_layout_parser.add_argument('--dry-run', action='store_true', help='Do not change layout')
-        change_layout_parser.add_argument("layout_name", type=str, nargs="?", help="Name of the layout to use")
+        change_layout_parser.add_argument(
+            "layout_name",
+            type=str,
+            help="Name of the layout to use"
+        )
         change_layout_parser.add_argument(
             "--screen-name",
             type=str,
@@ -49,15 +53,16 @@ class AppCLI:
             print(e)
             self.parser.print_help()
 
-
     @staticmethod
     def list_layouts() -> None:
         print("horizontal layouts:")
-        for layout in DEFAULT_LAYOUTS_DATA.horizontal:
-            print(f"  {layout}")
+        for layout in DEFAULT_CONFIG.layouts:
+            if layout.direction == "horizontal":
+                print(f"  {layout.name}")
         print("vertical layouts:")
-        for layout in DEFAULT_LAYOUTS_DATA.vertical:
-            print(f"  {layout}")
+        for layout in DEFAULT_CONFIG.layouts:
+            if layout.direction == "vertical":
+                print(f"  {layout.name}")
 
     @staticmethod
     def change_layout(layout_name: str, screen_name: Optional[str] = None, dry_run: bool = False) -> None:
@@ -74,20 +79,21 @@ class AppCLI:
         if target_screen is None:
             raise RuntimeError(f"Screen {screen_name} not found")
 
-        if target_screen.layout == 'horizontal' and layout_name in DEFAULT_LAYOUTS_DATA.horizontal:
-            layout_str = DEFAULT_LAYOUTS_DATA.horizontal[layout_name]
-        elif target_screen.layout == 'vertical' and layout_name in DEFAULT_LAYOUTS_DATA.vertical:
-            layout_str = DEFAULT_LAYOUTS_DATA.vertical[layout_name]
-        else:
-            raise RuntimeError(f"Layout {layout_name} not found for {target_screen.layout}")
+        layout = next(l for l in DEFAULT_CONFIG.layouts if l.name == layout_name and l.direction == target_screen.direction)
 
-        new_window_layout = calculate_layout_screen(target_screen, layout_str)
-        if not dry_run:
-            resize_reposition_window(window_data, new_window_layout)
+        if not layout:
+            raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")
+
+        new_window_layout = calculate_layout_screen(target_screen, layout)
         print('Screen "{}"'.format(target_screen))
-        print('Layout "{}" applied to screen "{}"'.format(layout_str, target_screen.name))
+        print('Layout "{}" applied to screen "{}"'.format(layout.layout, target_screen.name))
         print('Window "{}"'.format(window_data))
-        print('Window resized and repositioned {}'.format(new_window_layout))
+
+        if dry_run:
+            print('Dry run, calculated window layout: {}'.format(new_window_layout))
+        else:
+            resize_reposition_window(window_data, new_window_layout)
+            print('Window resized and repositioned {}'.format(new_window_layout))
 
     def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
         add_layout(self._get_config_path(), layout_name, layout_str, direction)

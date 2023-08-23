@@ -2,13 +2,13 @@ from typing import Optional
 
 import pytest
 from winshift.modules import layout
-from winshift.modules.layout import CalculatedLayout, BarHeight
+from winshift.modules.layout import CalculatedLayout, BarHeight, Layout
 from winshift.modules.screen import ScreenData
 
 
 BAR_HEIGHTS_SET = [
     (
-        BarHeight(top=0, right=0, bottom=0, left=960),
+        BarHeight(top=0, right=0, bottom=0, left=960, screen_name="DP-0"),
         "{width}/2,0,{width}/2,{height}",
         CalculatedLayout(
             x=960,
@@ -18,7 +18,7 @@ BAR_HEIGHTS_SET = [
         ),
     ),
     (
-        BarHeight(top=0, right=960, bottom=0, left=0),
+        BarHeight(top=0, right=960, bottom=0, left=0, screen_name="DP-0"),
         "0,0,{width}/2,{height}",
         CalculatedLayout(
             x=0,
@@ -28,7 +28,7 @@ BAR_HEIGHTS_SET = [
         ),
     ),
     (
-        BarHeight(top=540, right=0, bottom=0, left=0),
+        BarHeight(top=540, right=0, bottom=0, left=0, screen_name="DP-0"),
         "0,{height}/2,{width},{height}/2",
         CalculatedLayout(
             x=0,
@@ -38,7 +38,7 @@ BAR_HEIGHTS_SET = [
         ),
     ),
     (
-        BarHeight(top=0, right=0, bottom=540, left=0),
+        BarHeight(top=0, right=0, bottom=540, left=0, screen_name="DP-0"),
         "0,0,{width},{height}/2",
         CalculatedLayout(
             x=0,
@@ -48,7 +48,7 @@ BAR_HEIGHTS_SET = [
         ),
     ),
     (
-        BarHeight(top=0, right=0, bottom=540, left=0),
+        BarHeight(top=0, right=0, bottom=540, left=0, screen_name="DP-0"),
         "0,0,{width},{height}/2",
         CalculatedLayout(
             x=0,
@@ -58,6 +58,7 @@ BAR_HEIGHTS_SET = [
         ),
     )
 ]
+
 
 @pytest.mark.parametrize(
     "screen_data, layout_str, bar_height, expected",
@@ -69,7 +70,7 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                layout="horizontal",
+                direction="horizontal",
             ),
             "{x},{y},{width},{height}",
             None,
@@ -87,7 +88,7 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                layout="horizontal",
+                direction="horizontal",
             ),
             "{x},{y},{width}/2,{height}",
             None,
@@ -105,10 +106,10 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                layout="horizontal",
+                direction="horizontal",
             ),
             "{x},{y},{width},{height}",
-            BarHeight(10, 10, 10, 10),
+            BarHeight(top=10, right=10, bottom=10, left=10, screen_name="DP-0"),
             CalculatedLayout(
                 x=10,
                 y=10,
@@ -126,7 +127,11 @@ def test_calculate_layout_screen(
 ) -> None:
     result = layout.calculate_layout_screen(
         screen_data,
-        layout_str,
+        Layout(
+            name="test",
+            layout=layout_str,
+            direction="horizontal",
+        ),
         bar_height,
     )
 
@@ -143,9 +148,13 @@ def test_calculate_layout_bar_height(bar_height: BarHeight, layout_str: str, exp
             y=0,
             width=1920,
             height=1080,
-            layout="horizontal",
+            direction="horizontal",
         ),
-        layout_str,
+        Layout(
+            name="test",
+            layout=layout_str,
+            direction="horizontal",
+        ),
         bar_height,
     )
 
@@ -168,8 +177,12 @@ def test_calculate_layout_screen_invalid_layout(layout_str: str) -> None:
                 y=0,
                 width=1920,
                 height=1080,
-                layout="horizontal",
+                direction="horizontal",
             ),
-            layout_str,
+            Layout(
+                name="test",
+                layout=layout_str,
+                direction="horizontal",
+            ),
             None,
         )
