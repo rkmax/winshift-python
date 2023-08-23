@@ -1,6 +1,7 @@
 from dataclasses import asdict, dataclass
-from typing import Dict, Optional, List
+from typing import Dict, Optional
 
+from winshift.modules.direction import Direction
 from winshift.modules.screen import ScreenData
 
 
@@ -17,7 +18,7 @@ class BarHeight:
 class Layout:
     name: str
     layout: str
-    direction: str
+    direction: Direction
 
 
 @dataclass

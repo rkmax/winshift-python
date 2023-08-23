@@ -2,6 +2,8 @@ from dataclasses import dataclass
 import subprocess
 from typing import List, Optional
 
+from winshift.modules.direction import Direction
+
 
 @dataclass
 class ScreenData:
@@ -10,7 +12,7 @@ class ScreenData:
     y: int
     width: int
     height: int
-    direction: str
+    direction: Direction
 
 
 def _parse_screen_data(screen_data: List[str]) -> ScreenData:
@@ -21,9 +23,9 @@ def _parse_screen_data(screen_data: List[str]) -> ScreenData:
     y = int(screen_data[2].split("+")[2])
     width = int(screen_data[2].split("+")[0].split("x")[0].split("/")[0])
     height = int(screen_data[2].split("+")[0].split("x")[1].split("/")[0])
-    layout = "horizontal" if width > height else "vertical"
+    direction = Direction.HORIZONTAL if width > height else Direction.VERTICAL
 
-    return ScreenData(name, x, y, width, height, layout)
+    return ScreenData(name, x, y, width, height, direction)
 
 
 def get_screens_data() -> List[ScreenData]:

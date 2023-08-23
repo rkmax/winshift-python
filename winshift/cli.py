@@ -79,7 +79,8 @@ class AppCLI:
         if target_screen is None:
             raise RuntimeError(f"Screen {screen_name} not found")
 
-        layout = next(l for l in DEFAULT_CONFIG.layouts if l.name == layout_name and l.direction == target_screen.direction)
+        layout = next(layout_listed for layout_listed in DEFAULT_CONFIG.layouts
+                      if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction)
 
         if not layout:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")

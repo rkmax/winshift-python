@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from typing import List
 
 import toml
+
+from winshift.modules.direction import Direction
 from winshift.modules.layout import LayoutData, validate_layout, BarHeight, Layout
 
 
@@ -20,17 +22,17 @@ DEFAULT_CONFIG = ConfigData(
         Layout(
             name="full-size",
             layout="0,0,{width},{height}",
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         Layout(
             name="half-left",
             layout="0,0,{width}/2,{height}",
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         Layout(
             name="half-right",
             layout="{width}/2,0,{width}/2,{height}",
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
     ]
 )

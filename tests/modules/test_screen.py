@@ -1,6 +1,7 @@
 import pytest
 from pytest_mock import MockFixture
 from winshift.modules import screen
+from winshift.modules.direction import Direction
 from winshift.modules.screen import ScreenData
 
 
@@ -24,7 +25,7 @@ def test_get_screens_data(mocker: MockFixture) -> None:
             y=973,
             width=3840,
             height=2160,
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         ScreenData(
             name="DP-2",
@@ -32,7 +33,7 @@ def test_get_screens_data(mocker: MockFixture) -> None:
             y=0,
             width=2160,
             height=3840,
-            direction="vertical",
+            direction=Direction.VERTICAL,
         ),
     ]
 
@@ -56,7 +57,7 @@ def test_locate_point_on_screen(x: int, y: int, expected: str) -> None:
             y=973,
             width=3840,
             height=2160,
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         ScreenData(
             name="DP-2",
@@ -64,7 +65,7 @@ def test_locate_point_on_screen(x: int, y: int, expected: str) -> None:
             y=0,
             width=2160,
             height=3840,
-            direction="vertical",
+            direction=Direction.VERTICAL,
         ),
     ]
 
