@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 argparse = "^1.4.0"
 toml = "^0.10.2"
+prospector = {extras = ["with-pyroma"], version = "^1.10.2"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"

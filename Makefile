@@ -3,3 +3,7 @@ test:
 
 serv-coverage:
 	poetry run python -m http.server 8000 --directory htmlcov
+
+check:
+	poetry run black .
+	poetry run prospector

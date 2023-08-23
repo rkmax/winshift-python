@@ -2,6 +2,7 @@ from typing import Optional
 
 import pytest
 from winshift.modules import layout
+from winshift.modules.direction import Direction
 from winshift.modules.layout import CalculatedLayout, BarHeight, Layout
 from winshift.modules.screen import ScreenData
 
@@ -70,7 +71,7 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                direction="horizontal",
+                direction=Direction.HORIZONTAL,
             ),
             "{x},{y},{width},{height}",
             None,
@@ -88,7 +89,7 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                direction="horizontal",
+                direction=Direction.HORIZONTAL,
             ),
             "{x},{y},{width}/2,{height}",
             None,
@@ -106,7 +107,7 @@ BAR_HEIGHTS_SET = [
                 y=0,
                 width=1920,
                 height=1080,
-                direction="horizontal",
+                direction=Direction.HORIZONTAL,
             ),
             "{x},{y},{width},{height}",
             BarHeight(top=10, right=10, bottom=10, left=10, screen_name="DP-0"),
@@ -130,7 +131,7 @@ def test_calculate_layout_screen(
         Layout(
             name="test",
             layout=layout_str,
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         bar_height,
     )
@@ -148,12 +149,12 @@ def test_calculate_layout_bar_height(bar_height: BarHeight, layout_str: str, exp
             y=0,
             width=1920,
             height=1080,
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         Layout(
             name="test",
             layout=layout_str,
-            direction="horizontal",
+            direction=Direction.HORIZONTAL,
         ),
         bar_height,
     )
@@ -177,12 +178,12 @@ def test_calculate_layout_screen_invalid_layout(layout_str: str) -> None:
                 y=0,
                 width=1920,
                 height=1080,
-                direction="horizontal",
+                direction=Direction.HORIZONTAL,
             ),
             Layout(
                 name="test",
                 layout=layout_str,
-                direction="horizontal",
+                direction=Direction.HORIZONTAL,
             ),
             None,
         )

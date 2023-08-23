@@ -86,15 +86,15 @@ class AppCLI:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")
 
         new_window_layout = calculate_layout_screen(target_screen, layout)
-        print('Screen "{}"'.format(target_screen))
-        print('Layout "{}" applied to screen "{}"'.format(layout.layout, target_screen.name))
-        print('Window "{}"'.format(window_data))
+        print(f'Screen "{target_screen}"')
+        print(f'Layout "{layout.layout}" applied to screen "{target_screen.name}"')
+        print(f'Window "{window_data}"')
 
         if dry_run:
-            print('Dry run, calculated window layout: {}'.format(new_window_layout))
+            print(f'Dry run, calculated window layout: {new_window_layout}')
         else:
             resize_reposition_window(window_data, new_window_layout)
-            print('Window resized and repositioned {}'.format(new_window_layout))
+            print(f'Window resized and repositioned {new_window_layout}')
 
     def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
         add_layout(self._get_config_path(), layout_name, layout_str, direction)

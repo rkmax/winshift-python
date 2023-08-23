@@ -30,11 +30,10 @@ def _parse_screen_data(screen_data: List[str]) -> ScreenData:
 
 def get_screens_data() -> List[ScreenData]:
     """Return screen data using xrandr."""
-    xrandr = subprocess.Popen(
-        ["xrandr", "--listactivemonitors"], stdout=subprocess.PIPE
-    )
-    monitors = xrandr.stdout.read().decode("utf-8").split("\n")[1:-1]
-    return [_parse_screen_data(monitor.split()) for monitor in monitors]
+    args = ["xrandr", "--listactivemonitors"]
+    with subprocess.Popen(args, stdout=subprocess.PIPE) as xrandr:
+        monitors = xrandr.stdout.read().decode("utf-8").split("\n")[1:-1]
+        return [_parse_screen_data(monitor.split()) for monitor in monitors]
 
 
 def locate_point_on_screen(
@@ -61,7 +60,7 @@ def locate_point_on_screen(
     # if no match, try to match only horizontal or vertical
     if horizontal_matches:
         return horizontal_matches[0]
-    elif vertical_matches:
+    if vertical_matches:
         return vertical_matches[0]
 
     return None

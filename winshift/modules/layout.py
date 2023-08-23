@@ -96,7 +96,7 @@ def validate_layout(layout: str) -> None:
         int(eval(y))
         int(eval(width))
         int(eval(height))
-    except Exception:
+    except Exception as exc:
         raise ValueError(
             "Invalid layout format. int,int,int,int expected. {width} and {height} are available."
-        )
+        ) from exc
