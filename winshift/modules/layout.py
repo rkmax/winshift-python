@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass
 from typing import Dict, Optional
+from simpleeval import simple_eval
 
 from winshift.modules.direction import Direction
 from winshift.modules.screen import ScreenData
@@ -44,7 +45,7 @@ def calculate_layout_screen(
 
     calculated_layout = layout.layout.format(**screen_data_dict)
 
-    result = CalculatedLayout(*[int(eval(value)) for value in calculated_layout.split(",")])
+    result = CalculatedLayout(*[simple_eval(value) for value in calculated_layout.split(",")])
 
     # ensure to apply bar_height and screen offsets
     bar_height = bar_height or BarHeight(top=0, bottom=0, left=0, right=0, screen_name=screen_data.name)
@@ -90,10 +91,10 @@ def validate_layout(layout: str) -> None:
                 "height": 1080,
             }
         ).split(",")
-        int(eval(x))
-        int(eval(y))
-        int(eval(width))
-        int(eval(height))
+        simple_eval(x)
+        simple_eval(y)
+        simple_eval(width)
+        simple_eval(height)
     except Exception as exc:
         raise ValueError(
             "Invalid layout format. int,int,int,int expected. {width} and {height} are available."
