@@ -10,8 +10,9 @@ def test_get_screens_data(mocker: MockFixture) -> None:
         "Monitors: 2\n" " 0: +*DP-0 3840/600x2160/340+2160+973  DP-0\n" " 1: +DP-2 2160/600x3840/340+0+0  DP-2\n"
     ).encode("utf-8")
 
-    mock_process = mocker.Mock()
-    mock_process.stdout.read.return_value = mock_output
+    mock_process = mocker.MagicMock()
+    mock_process.__enter__.return_value.stdout.read.return_value = mock_output
+
     mocker.patch("subprocess.Popen", return_value=mock_process)
 
     result = screen.get_screens_data()
