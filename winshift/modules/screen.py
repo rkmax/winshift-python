@@ -10,7 +10,7 @@ class ScreenData:
     y: int
     width: int
     height: int
-    layout: str
+    direction: str
 
 
 def _parse_screen_data(screen_data: List[str]) -> ScreenData:

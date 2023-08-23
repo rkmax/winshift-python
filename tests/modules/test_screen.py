@@ -24,7 +24,7 @@ def test_get_screens_data(mocker: MockFixture) -> None:
             y=973,
             width=3840,
             height=2160,
-            layout="horizontal",
+            direction="horizontal",
         ),
         ScreenData(
             name="DP-2",
@@ -32,7 +32,7 @@ def test_get_screens_data(mocker: MockFixture) -> None:
             y=0,
             width=2160,
             height=3840,
-            layout="vertical",
+            direction="vertical",
         ),
     ]
 
@@ -56,7 +56,7 @@ def test_locate_point_on_screen(x: int, y: int, expected: str) -> None:
             y=973,
             width=3840,
             height=2160,
-            layout="horizontal",
+            direction="horizontal",
         ),
         ScreenData(
             name="DP-2",
@@ -64,7 +64,7 @@ def test_locate_point_on_screen(x: int, y: int, expected: str) -> None:
             y=0,
             width=2160,
             height=3840,
-            layout="vertical",
+            direction="vertical",
         ),
     ]
 
