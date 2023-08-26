@@ -1,15 +1,17 @@
 import argparse
-import os
 import shutil
 from typing import Optional
 
-from winshift.modules.config import add_layout, DEFAULT_CONFIG
-from winshift.modules.layout import calculate_layout_screen
+from winshift.modules.config import add_layout, load_config, ConfigData
+from winshift.modules.direction import Direction
+from winshift.modules.layout import calculate_layout_screen, Layout
 from winshift.modules.screen import get_screens_data, locate_point_on_screen
 from winshift.modules.window import get_active_window_data, resize_reposition_window
 
 
 class AppCLI:
+    config: ConfigData
+
     def __init__(self):
         self.parser = argparse.ArgumentParser(description="Divvy")
         subparsers = self.parser.add_subparsers(dest="command")
@@ -39,29 +41,35 @@ class AppCLI:
     def run(self):
         try:
             args = self.parser.parse_args()
+            self.config = load_config()
             if args.command == "list-layouts":
                 self.list_layouts()
             elif args.command == "change-layout":
                 self.change_layout(args.layout_name, args.screen_name, args.dry_run)
             elif args.command == "add-layout":
-                self.add_layout(args.layout_name, args.layout_str, args.direction)
+                add_layout(Layout(
+                    name=args.layout_name,
+                    layout=args.layout_str,
+                    direction=Direction(args.direction),
+                ))
+            else:
+                self.parser.print_help()
         except Exception as e:
             print(e)
             self.parser.print_help()
 
-    @staticmethod
-    def list_layouts() -> None:
-        print("horizontal layouts:")
-        for layout in DEFAULT_CONFIG.layouts:
-            if layout.direction == "horizontal":
-                print(f"  {layout.name}")
-        print("vertical layouts:")
-        for layout in DEFAULT_CONFIG.layouts:
-            if layout.direction == "vertical":
-                print(f"  {layout.name}")
+    def list_layouts(self) -> None:
+        for direction in [Direction.HORIZONTAL, Direction.VERTICAL]:
+            dir_layouts = []
+            for layout in self.config.layouts:
+                if layout.direction == direction:
+                    dir_layouts.append(layout)
+            if dir_layouts:
+                print(f"layouts {direction.value} screens:")
+                for layout in dir_layouts:
+                    print(f"  {layout.name}")
 
-    @staticmethod
-    def change_layout(layout_name: str, screen_name: Optional[str] = None, dry_run: bool = False) -> None:
+    def change_layout(self, layout_name: str, screen_name: Optional[str] = None, dry_run: bool = False) -> None:
         window_data = get_active_window_data()
         screens_data = get_screens_data()
 
@@ -75,7 +83,7 @@ class AppCLI:
 
         layout = next(
             layout_listed
-            for layout_listed in DEFAULT_CONFIG.layouts
+            for layout_listed in self.config.layouts
             if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction
         )
 
@@ -92,13 +100,6 @@ class AppCLI:
         else:
             resize_reposition_window(window_data, new_window_layout)
             print(f"Window resized and repositioned {new_window_layout}")
-
-    def add_layout(self, layout_name: str, layout_str: str, direction: str) -> None:
-        add_layout(self._get_config_path(), layout_name, layout_str, direction)
-
-    @staticmethod
-    def _get_config_path():
-        return os.path.expanduser("~/.config/winshift/config.toml")
 
 
 def _check_external_dependencies() -> None:
