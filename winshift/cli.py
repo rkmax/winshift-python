@@ -30,7 +30,7 @@ class AppCLI:
         )
         # add_layout_parser
         add_layout_parser = subparsers.add_parser("add-layout", help="Add a new layout")
-        add_layout_parser.add_argument("--direction", type=str, help="horizontal layout")
+        add_layout_parser.add_argument("--direction", type=str, help="Screen direction (horizontal or vertical)")
         add_layout_parser.add_argument("layout_name", type=str, help="Name of the layout")
         add_layout_parser.add_argument(
             "layout_str",
