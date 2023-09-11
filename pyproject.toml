@@ -18,8 +18,8 @@ black = "^23.7.0"
 pytest-mock = "^3.11.1"
 pytest-cov = "^4.1.0"
 
-[tools.poetry.scripts]
-winshift = "winshift.cli:main"
+[tool.poetry.scripts]
+winshift-cli = "winshift.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
