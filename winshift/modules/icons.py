@@ -20,15 +20,15 @@ def create_image(
 
     :param image_size: Side length of the image
     :param margin: Margin around the image
-    :param screen_dims: Dimensions of the first rectangle (width, height)
-    :param window_dims: Dimensions of the second rectangle (x offset, y offset, width, height)
+    :param screen_dims: Dimensions of the screen rectangle (width, height)
+    :param window_dims: Dimensions of the window rectangle (x offset, y offset, width, height)
     :param output_path: Path to save the output image
-    :param screen_color: Fill color for the first rectangle
-    :param screen_border_color: Border color for the first rectangle
-    :param screen_border_width: Border width for the first rectangle
-    :param window_color: Fill color for the second rectangle
-    :param window_border_color: Border color for the second rectangle
-    :param window_border_width: Border width for the second rectangle
+    :param screen_color: Fill color for the screen rectangle
+    :param screen_border_color: Border color for the screen rectangle
+    :param screen_border_width: Border width for the screen rectangle
+    :param window_color: Fill color for the window rectangle
+    :param window_border_color: Border color for the window rectangle
+    :param window_border_width: Border width for the window rectangle
     """
     # Create a new image with transparency
     img = Image.new("RGBA", (image_size, image_size), (0, 0, 0, 0))
