@@ -52,6 +52,20 @@ class AppCLI:
         generate_layout_icons_parser = subparsers.add_parser("generate-layout-icons", help="Generate layout icons")
         generate_layout_icons_parser.add_argument("output_dir_path", type=str, help="Output directory path")
         generate_layout_icons_parser.add_argument(
+            "--image-size",
+            type=int,
+            nargs="?",
+            default=72,
+            help="Size of the generated icons (default: 72)",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--margin",
+            type=int,
+            nargs="?",
+            default=8,
+            help="Margin of the generated icons (default: 6)",
+        )
+        generate_layout_icons_parser.add_argument(
             "--screen-color",
             type=str,
             nargs="?",
@@ -131,6 +145,8 @@ class AppCLI:
                     args.window_color,
                     args.window_border_color,
                     args.window_border_width,
+                    args.image_size,
+                    args.margin,
                 )
             else:
                 self.parser.print_help()
@@ -209,6 +225,8 @@ class AppCLI:
         window_color: str,
         window_border_color: str,
         window_border_width: int,
+        image_size: int,
+        margin: int,
     ) -> None:
         screens_data = get_screens_data()
         if not screens_data:
@@ -231,8 +249,8 @@ class AppCLI:
             window = calculate_layout_screen(screen_data, layout)
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
             create_image(
-                image_size=72,
-                margin=6,
+                image_size=image_size,
+                margin=margin,
                 screen_dims=(screen_data.width, screen_data.height),
                 window_dims=(window.x, window.y, window.width, window.height),
                 output_path=output_path,
