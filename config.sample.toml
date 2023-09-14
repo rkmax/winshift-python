@@ -1,0 +1,106 @@
+[bar_heights.DP-0]
+screen_name = "DP-0"
+top = 0
+bottom = 45
+right = 0
+left = 0
+
+[layouts.centered-left]
+name = "centered-left"
+layout = "100,{height}*1/6,{width}*3/5,{height}*2/3"
+direction = "horizontal"
+
+[layouts.full-size]
+name = "full-size"
+layout = "0,0,{width},{height}"
+direction = "vertical"
+
+[layouts.half-left]
+name = "half-left"
+layout = "0,0,{width}/2,{height}"
+direction = "horizontal"
+
+[layouts.half-right]
+name = "half-right"
+layout = "{width}/2,0,{width}/2,{height}"
+direction = "horizontal"
+
+[layouts.top-left]
+name = "top-left"
+layout = "0,0,{width}/2,{height}/2"
+direction = "horizontal"
+
+[layouts.top-right]
+name = "top-right"
+layout = "{width}/2,0,{width}/2,{height}/2"
+direction = "horizontal"
+
+[layouts.bottom-left]
+name = "bottom-left"
+layout = "0,{height}/2,{width}/2,{height}/2"
+direction = "horizontal"
+
+[layouts.bottom-right]
+name = "bottom-right"
+layout = "{width}/2,{height}/2,{width}/2,{height}/2"
+direction = "horizontal"
+
+[layouts.two-thirds-left]
+name = "two-thirds-left"
+layout = "0,0,{width}*2/3,{height}"
+direction = "horizontal"
+
+[layouts.two-thirds-right]
+name = "two-thirds-right"
+layout = "{width}/3,0,{width}*2/3,{height}"
+direction = "horizontal"
+
+[layouts.one-third-left]
+name = "one-third-left"
+layout = "0,0,{width}/3,{height}"
+direction = "horizontal"
+
+[layouts.one-third-right]
+name = "one-third-right"
+layout = "{width}*2/3,0,{width}/3,{height}"
+direction = "horizontal"
+
+[layouts.one-third-top-right]
+name = "one-third-top-right"
+layout = "{width}*2/3,0,{width}/3,{height}/2"
+direction = "horizontal"
+
+[layouts.one-third-bottom-right]
+name = "one-third-bottom-right"
+layout = "{width}*2/3,{height}/2,{width}/3,{height}/2"
+direction = "horizontal"
+
+[layouts.half-top]
+name = "half-top"
+layout = "0,0,{width},{height}/2"
+direction = "vertical"
+
+[layouts.half-bottom]
+name = "half-bottom"
+layout = "0,{height}/2,{width},{height}/2"
+direction = "vertical"
+
+[layouts.first-quarter]
+name = "first-quarter"
+layout = "0,0,{width},{height}/4"
+direction = "vertical"
+
+[layouts.second-quarter]
+name = "second-quarter"
+layout = "0,{height}/4,{width},{height}/4"
+direction = "vertical"
+
+[layouts.third-quarter]
+name = "third-quarter"
+layout = "0,{height}/2,{width},{height}/4"
+direction = "vertical"
+
+[layouts.fourth-quarter]
+name = "fourth-quarter"
+layout = "0,{height}*3/4,{width},{height}/4"
+direction = "vertical"
