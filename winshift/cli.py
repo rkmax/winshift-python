@@ -141,13 +141,15 @@ class AppCLI:
     def list_layouts(self) -> None:
         for direction in [Direction.HORIZONTAL, Direction.VERTICAL]:
             dir_layouts = []
+            max_layout_name_len = 0
             for layout in self.config.layouts:
                 if layout.direction == direction:
                     dir_layouts.append(layout)
+                    max_layout_name_len = max(max_layout_name_len, len(layout.name))
             if dir_layouts:
                 print(f"layouts {direction.value} screens:")
                 for layout in dir_layouts:
-                    print(f"  {layout.name}")
+                    print(f"  {layout.name.ljust(max_layout_name_len)} \t {layout.layout}")
 
     def change_layout(self, layout_name: str, screen_name: Optional[str] = None, dry_run: bool = False) -> None:
         window_data = get_active_window_data()
