@@ -42,10 +42,10 @@ class AppCLI:
         # add bar height
         add_bar_height_parser = subparsers.add_parser("add-bar-height", help="Add a new bar height")
         add_bar_height_parser.add_argument("--screen-name", type=str, help="Screen name (xrandr name)")
-        add_bar_height_parser.add_argument('--left', type=int,  nargs="?", default=0, help="Left bar height")
-        add_bar_height_parser.add_argument('--right', type=int,  nargs="?", default=0, help="Right bar height")
-        add_bar_height_parser.add_argument('--top', type=int,  nargs="?", default=0, help="Top bar height")
-        add_bar_height_parser.add_argument('--bottom', type=int,  nargs="?", default=0, help="Bottom bar height")
+        add_bar_height_parser.add_argument("--left", type=int, nargs="?", default=0, help="Left bar height")
+        add_bar_height_parser.add_argument("--right", type=int, nargs="?", default=0, help="Right bar height")
+        add_bar_height_parser.add_argument("--top", type=int, nargs="?", default=0, help="Top bar height")
+        add_bar_height_parser.add_argument("--bottom", type=int, nargs="?", default=0, help="Bottom bar height")
 
     def run(self):
         try:
@@ -56,21 +56,25 @@ class AppCLI:
             elif args.command == "change-layout":
                 self.change_layout(args.layout_name, args.screen_name, args.dry_run)
             elif args.command == "add-layout":
-                add_layout(Layout(
-                    name=args.layout_name,
-                    layout=args.layout_str,
-                    direction=Direction(args.direction),
-                ))
+                add_layout(
+                    Layout(
+                        name=args.layout_name,
+                        layout=args.layout_str,
+                        direction=Direction(args.direction),
+                    )
+                )
             elif args.command == "list-bar-heights":
                 self.list_bar_heights()
             elif args.command == "add-bar-height":
-                add_bar_height(BarHeight(
-                    screen_name=args.screen_name,
-                    top=args.top,
-                    bottom=args.bottom,
-                    right=args.right,
-                    left=args.left,
-                ))
+                add_bar_height(
+                    BarHeight(
+                        screen_name=args.screen_name,
+                        top=args.top,
+                        bottom=args.bottom,
+                        right=args.right,
+                        left=args.left,
+                    )
+                )
             else:
                 self.parser.print_help()
         except Exception as e:
@@ -101,18 +105,24 @@ class AppCLI:
             raise RuntimeError(f"Screen {screen_name} not found")
 
         layout = next(
-            layout_listed
-            for layout_listed in self.config.layouts
-            if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction
+            (
+                layout_listed
+                for layout_listed in self.config.layouts
+                if layout_listed.name == layout_name and layout_listed.direction == target_screen.direction
+            ),
+            None,
         )
 
         if not layout:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")
 
         bar_height = next(
-            bar_height_listed
-            for bar_height_listed in self.config.bar_heights
-            if bar_height_listed.screen_name == target_screen.name
+            (
+                bar_height_listed
+                for bar_height_listed in self.config.bar_heights
+                if bar_height_listed.screen_name == target_screen.name
+            ),
+            None,
         )
 
         new_window_layout = calculate_layout_screen(target_screen, layout, bar_height)
