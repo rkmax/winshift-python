@@ -138,15 +138,15 @@ class AppCLI:
                 )
             elif args.command == "generate-layout-icons":
                 self.generate_layout_icons(
-                    args.output_dir_path,
-                    args.screen_color,
-                    args.screen_border_color,
-                    args.screen_border_width,
-                    args.window_color,
-                    args.window_border_color,
-                    args.window_border_width,
-                    args.image_size,
-                    args.margin,
+                    output_dir_path=args.output_dir_path,
+                    screen_color=args.screen_color,
+                    screen_border_color=args.screen_border_color,
+                    screen_border_width=args.screen_border_width,
+                    window_color=args.window_color,
+                    window_border_color=args.window_border_color,
+                    window_border_width=args.window_border_width,
+                    image_size=args.image_size,
+                    margin=args.margin,
                 )
             else:
                 self.parser.print_help()
