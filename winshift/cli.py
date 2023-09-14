@@ -1,11 +1,13 @@
+import os
 import argparse
 import shutil
 from typing import Optional
 
 from winshift.modules.config import add_layout, add_bar_height, load_config, ConfigData
 from winshift.modules.direction import Direction
+from winshift.modules.icons import create_image
 from winshift.modules.layout import calculate_layout_screen, Layout, BarHeight
-from winshift.modules.screen import get_screens_data, locate_point_on_screen
+from winshift.modules.screen import get_screens_data, locate_point_on_screen, ScreenData
 from winshift.modules.window import get_active_window_data, resize_reposition_window
 
 
@@ -46,6 +48,9 @@ class AppCLI:
         add_bar_height_parser.add_argument("--right", type=int, nargs="?", default=0, help="Right bar height")
         add_bar_height_parser.add_argument("--top", type=int, nargs="?", default=0, help="Top bar height")
         add_bar_height_parser.add_argument("--bottom", type=int, nargs="?", default=0, help="Bottom bar height")
+        # generate layout icons
+        generate_layout_icons_parser = subparsers.add_parser("generate-layout-icons", help="Generate layout icons")
+        generate_layout_icons_parser.add_argument("output_dir_path", type=str, help="Output directory path")
 
     def run(self):
         try:
@@ -75,6 +80,8 @@ class AppCLI:
                         left=args.left,
                     )
                 )
+            elif args.command == "generate-layout-icons":
+                self.generate_layout_icons(args.output_dir_path)
             else:
                 self.parser.print_help()
         except Exception as e:
@@ -140,6 +147,36 @@ class AppCLI:
     def list_bar_heights(self) -> None:
         for bar_height in self.config.bar_heights:
             print(f"{bar_height}")
+
+    def generate_layout_icons(self, output_dir_path: str) -> None:
+        screens_data = get_screens_data()
+        if not screens_data:
+            raise RuntimeError("No screens found")
+        screen_width = screens_data[0].width
+        screen_height = screens_data[0].height
+        screen_direction = screens_data[0].direction
+
+        for layout in self.config.layouts:
+            screen_data = ScreenData(
+                name="",
+                x=0,
+                y=0,
+                width= screen_width if layout.direction == screen_direction else screen_height,
+                height=screen_height if layout.direction == screen_direction else screen_width,
+                direction=layout.direction,
+            )
+
+            output_path = os.path.join(output_dir_path, f"{layout.direction.value}-{layout.name}.png")
+            window = calculate_layout_screen(screen_data, layout)
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            create_image(
+                image_size=72,
+                margin=6,
+                screen_dims=(screen_data.width, screen_data.height),
+                window_dims=(window.x, window.y, window.width, window.height),
+                output_path=output_path,
+            )
+            print(f"Created {output_path}")
 
 
 def _check_external_dependencies() -> None:
