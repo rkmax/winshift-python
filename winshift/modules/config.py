@@ -20,11 +20,11 @@ class ConfigData:
         }
 
     @staticmethod
-    def from_dict(data: dict) -> 'ConfigData':
-        if 'bar_heights' not in data:
-            data['bar_heights'] = {}
-        if 'layouts' not in data:
-            data['layouts'] = {}
+    def from_dict(data: dict) -> "ConfigData":
+        if "bar_heights" not in data:
+            data["bar_heights"] = {}
+        if "layouts" not in data:
+            data["layouts"] = {}
         return ConfigData(
             bar_heights=[_bar_height_from_dict(b) for b in data["bar_heights"].values()],
             layouts=[_layout_from_dict(l) for l in data["layouts"].values()],
@@ -47,7 +47,7 @@ def _bar_height_from_dict(data: dict) -> BarHeight:
         top=data.get("top", 0),
         bottom=data.get("bottom", 0),
         right=data.get("right", 0),
-        left=data.get("left", 0)
+        left=data.get("left", 0),
     )
 
 
