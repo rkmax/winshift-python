@@ -16,7 +16,7 @@ class ConfigData:
     def as_dict(self) -> dict:
         return {
             "bar_heights": {b.screen_name: _bar_height_as_dict(b) for b in self.bar_heights},
-            "layouts": {layout.name: _layout_as_dict(layout) for layout in self.layouts},
+            "layouts": {f"{layout.direction.value}_{layout.name}": _layout_as_dict(layout) for layout in self.layouts},
         }
 
     @staticmethod
