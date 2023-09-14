@@ -51,6 +51,48 @@ class AppCLI:
         # generate layout icons
         generate_layout_icons_parser = subparsers.add_parser("generate-layout-icons", help="Generate layout icons")
         generate_layout_icons_parser.add_argument("output_dir_path", type=str, help="Output directory path")
+        generate_layout_icons_parser.add_argument(
+            "--screen-color",
+            type=str,
+            nargs="?",
+            default="#6699ff",
+            help="Color used for the screen rectangle in the generated icons",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--screen-border-color",
+            type=str,
+            nargs="?",
+            default="#b2b2b2",
+            help="Color used for the screen rectangle border in the generated icons (default: #b2b2b2)",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--screen-border-width",
+            type=int,
+            nargs="?",
+            default=0,
+            help="Width used for the screen rectangle border in the generated icons (default: 0)",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--window-color",
+            type=str,
+            nargs="?",
+            default="#003399",
+            help="Color used for the window rectangle in the generated icons (default: #003399)",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--window-border-color",
+            type=str,
+            nargs="?",
+            default="#b2b2b2",
+            help="Color used for the window rectangle border in the generated icons (default: #b2b2b2)",
+        )
+        generate_layout_icons_parser.add_argument(
+            "--window-border-width",
+            type=int,
+            nargs="?",
+            default=1,
+            help="Width used for the window rectangle border in the generated icons (default: 1)",
+        )
 
     def run(self):
         try:
@@ -81,7 +123,15 @@ class AppCLI:
                     )
                 )
             elif args.command == "generate-layout-icons":
-                self.generate_layout_icons(args.output_dir_path)
+                self.generate_layout_icons(
+                    args.output_dir_path,
+                    args.screen_color,
+                    args.screen_border_color,
+                    args.screen_border_width,
+                    args.window_color,
+                    args.window_border_color,
+                    args.window_border_width,
+                )
             else:
                 self.parser.print_help()
         except Exception as e:
@@ -148,7 +198,16 @@ class AppCLI:
         for bar_height in self.config.bar_heights:
             print(f"{bar_height}")
 
-    def generate_layout_icons(self, output_dir_path: str) -> None:
+    def generate_layout_icons(
+        self,
+        output_dir_path: str,
+        screen_color: str,
+        screen_border_color: str,
+        screen_border_width: int,
+        window_color: str,
+        window_border_color: str,
+        window_border_width: int,
+    ) -> None:
         screens_data = get_screens_data()
         if not screens_data:
             raise RuntimeError("No screens found")
@@ -161,7 +220,7 @@ class AppCLI:
                 name="",
                 x=0,
                 y=0,
-                width= screen_width if layout.direction == screen_direction else screen_height,
+                width=screen_width if layout.direction == screen_direction else screen_height,
                 height=screen_height if layout.direction == screen_direction else screen_width,
                 direction=layout.direction,
             )
@@ -175,6 +234,12 @@ class AppCLI:
                 screen_dims=(screen_data.width, screen_data.height),
                 window_dims=(window.x, window.y, window.width, window.height),
                 output_path=output_path,
+                screen_color=screen_color,
+                screen_border_color=screen_border_color,
+                screen_border_width=screen_border_width,
+                window_color=window_color,
+                window_border_color=window_border_color,
+                window_border_width=window_border_width,
             )
             print(f"Created {output_path}")
 

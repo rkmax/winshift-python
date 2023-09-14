@@ -8,12 +8,12 @@ def create_image(
     screen_dims: Tuple[int, int],
     window_dims: Tuple[int, int, int, int],
     output_path: str,
-    screen_color: str = "#6699ff",
-    screen_border_color: str = "#b2b2b2",
-    screen_border_width: int = 0,
-    window_color: str = "#003399",
-    window_border_color: str = "#b2b2b2",
-    window_border_width: int = 2,
+    screen_color: str,
+    screen_border_color: str,
+    screen_border_width: int,
+    window_color: str,
+    window_border_color: str,
+    window_border_width: int,
 ) -> None:
     """
     Creates an image with two rectangles following specified conditions and saves it.
