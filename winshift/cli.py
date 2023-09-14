@@ -2,9 +2,9 @@ import argparse
 import shutil
 from typing import Optional
 
-from winshift.modules.config import add_layout, load_config, ConfigData
+from winshift.modules.config import add_layout, add_bar_height, load_config, ConfigData
 from winshift.modules.direction import Direction
-from winshift.modules.layout import calculate_layout_screen, Layout
+from winshift.modules.layout import calculate_layout_screen, Layout, BarHeight
 from winshift.modules.screen import get_screens_data, locate_point_on_screen
 from winshift.modules.window import get_active_window_data, resize_reposition_window
 
@@ -37,6 +37,15 @@ class AppCLI:
             type=str,
             help="layout string in the format ({x},{y},{width},{height})",
         )
+        # list bar heights
+        subparsers.add_parser("list-bar-heights", help="List bar heights")
+        # add bar height
+        add_bar_height_parser = subparsers.add_parser("add-bar-height", help="Add a new bar height")
+        add_bar_height_parser.add_argument("--screen-name", type=str, help="Screen name (xrandr name)")
+        add_bar_height_parser.add_argument('--left', type=int,  nargs="?", default=0, help="Left bar height")
+        add_bar_height_parser.add_argument('--right', type=int,  nargs="?", default=0, help="Right bar height")
+        add_bar_height_parser.add_argument('--top', type=int,  nargs="?", default=0, help="Top bar height")
+        add_bar_height_parser.add_argument('--bottom', type=int,  nargs="?", default=0, help="Bottom bar height")
 
     def run(self):
         try:
@@ -51,6 +60,16 @@ class AppCLI:
                     name=args.layout_name,
                     layout=args.layout_str,
                     direction=Direction(args.direction),
+                ))
+            elif args.command == "list-bar-heights":
+                self.list_bar_heights()
+            elif args.command == "add-bar-height":
+                add_bar_height(BarHeight(
+                    screen_name=args.screen_name,
+                    top=args.top,
+                    bottom=args.bottom,
+                    right=args.right,
+                    left=args.left,
                 ))
             else:
                 self.parser.print_help()
@@ -90,9 +109,16 @@ class AppCLI:
         if not layout:
             raise RuntimeError(f"Layout {layout_name} not found for {target_screen.direction}")
 
-        new_window_layout = calculate_layout_screen(target_screen, layout)
+        bar_height = next(
+            bar_height_listed
+            for bar_height_listed in self.config.bar_heights
+            if bar_height_listed.screen_name == target_screen.name
+        )
+
+        new_window_layout = calculate_layout_screen(target_screen, layout, bar_height)
         print(f'Screen "{target_screen}"')
         print(f'Layout "{layout.layout}" applied to screen "{target_screen.name}"')
+        print(f'Bar height "{bar_height}" applied to screen "{target_screen.name}"')
         print(f'Window "{window_data}"')
 
         if dry_run:
@@ -100,6 +126,10 @@ class AppCLI:
         else:
             resize_reposition_window(window_data, new_window_layout)
             print(f"Window resized and repositioned {new_window_layout}")
+
+    def list_bar_heights(self) -> None:
+        for bar_height in self.config.bar_heights:
+            print(f"{bar_height}")
 
 
 def _check_external_dependencies() -> None:

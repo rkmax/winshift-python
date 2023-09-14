@@ -8,8 +8,6 @@ from winshift.modules.direction import Direction
 from winshift.modules.layout import validate_layout, BarHeight, Layout
 
 
-
-
 @dataclass
 class ConfigData:
     bar_heights: List[BarHeight]
@@ -46,10 +44,10 @@ def _bar_height_as_dict(bar_height: BarHeight) -> dict:
 def _bar_height_from_dict(data: dict) -> BarHeight:
     return BarHeight(
         screen_name=data["screen_name"],
-        top=data["top"],
-        bottom=data["bottom"],
-        right=data["right"],
-        left=data["left"],
+        top=data.get("top", 0),
+        bottom=data.get("bottom", 0),
+        right=data.get("right", 0),
+        left=data.get("left", 0)
     )
 
 
