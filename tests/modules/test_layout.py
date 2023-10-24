@@ -118,6 +118,19 @@ BAR_HEIGHTS_SET = [
                 height=1070,
             ),
         ),
+        (
+            ScreenData(
+                name="DP-2",
+                x=0,
+                y=0,
+                width=2160,
+                height=3840,
+                direction=Direction.VERTICAL,
+            ),
+            "0,{height}*2/3,{width},{height}/3",
+            BarHeight(top=45, right=45, bottom=45, left=45, screen_name="DP-2"),
+            CalculatedLayout(x=45, y=2560, width=2160 - (2*45), height=1280-45)
+        )
     ],
 )
 def test_calculate_layout_screen(

@@ -61,15 +61,15 @@ def calculate_layout_screen(
         # apply the difference to the height
         result.y += diff
 
-    if result.width > screen_data.width - bar_height.right:
+    if result.x + result.width > screen_data.width - bar_height.right:
         # calculate the difference
-        diff = result.width - (screen_data.width - bar_height.right)
+        diff = (result.x + result.width) - (screen_data.width - bar_height.right)
         # apply the difference to the width
         result.width -= diff
 
-    if result.height > screen_data.height - bar_height.bottom:
+    if result.y + result.height > screen_data.height - bar_height.bottom:
         # calculate the difference
-        diff = result.height - (screen_data.height - bar_height.bottom)
+        diff = (result.y + result.height) - (screen_data.height - bar_height.bottom)
         # apply the difference to the height
         result.height -= diff
 
