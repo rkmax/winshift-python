@@ -99,3 +99,13 @@ def validate_layout(layout: str) -> None:
         raise ValueError(
             "Invalid layout format. int,int,int,int expected. {width} and {height} are available."
         ) from exc
+
+
+def validate_layout_name(layout_name: str) -> None:
+    if layout_name == "" or layout_name is None:
+        raise ValueError("layout_name must not be empty")
+
+
+def validate_bar_height(bar_height: BarHeight) -> None:
+    if bar_height.screen_name == "" or bar_height.screen_name is None:
+        raise ValueError("screen_name must not be empty")

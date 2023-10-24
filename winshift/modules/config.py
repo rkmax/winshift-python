@@ -5,7 +5,7 @@ from typing import List
 import toml
 
 from winshift.modules.direction import Direction
-from winshift.modules.layout import validate_layout, BarHeight, Layout
+from winshift.modules.layout import validate_layout, BarHeight, Layout, validate_bar_height, validate_layout_name
 
 
 @dataclass
@@ -126,6 +126,7 @@ def load_config() -> ConfigData:
 
 def add_layout(layout: Layout) -> None:
     """Add a new layout to the config file."""
+    validate_layout_name(layout.name)
     validate_layout(layout.layout)
     config = _read_config(DEFAULT_CONFIG_PATH)
     config.layouts.append(layout)
@@ -134,6 +135,7 @@ def add_layout(layout: Layout) -> None:
 
 def add_bar_height(bar_height: BarHeight) -> None:
     """Add a new bar height to the config file."""
+    validate_bar_height(bar_height)
     config = _read_config(DEFAULT_CONFIG_PATH)
     config.bar_heights.append(bar_height)
     _write_config(DEFAULT_CONFIG_PATH, config)
