@@ -38,6 +38,7 @@ def _bar_height_as_dict(bar_height: BarHeight) -> dict:
         "bottom": bar_height.bottom,
         "right": bar_height.right,
         "left": bar_height.left,
+        "gap": bar_height.gap
     }
 
 
@@ -48,6 +49,7 @@ def _bar_height_from_dict(data: dict) -> BarHeight:
         bottom=data.get("bottom", 0),
         right=data.get("right", 0),
         left=data.get("left", 0),
+        gap=data.get("gap")
     )
 
 

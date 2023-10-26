@@ -13,6 +13,7 @@ class BarHeight:
     bottom: int
     left: int
     right: int
+    gap: int
 
 
 @dataclass
@@ -48,30 +49,32 @@ def calculate_layout_screen(
     result = CalculatedLayout(*[simple_eval(value) for value in calculated_layout.split(",")])
 
     # ensure to apply bar_height and screen offsets
-    bar_height = bar_height or BarHeight(top=0, bottom=0, left=0, right=0, screen_name=screen_data.name)
+    bar_height = bar_height or BarHeight(top=0, bottom=0, left=0, right=0, gap=0, screen_name=screen_data.name)
 
+    # calculate if the result goes beyond the established limits for each side of the screen
+    # otherwise we use the gap
     if result.x < bar_height.left:
-        # calculate the difference
         diff = bar_height.left - result.x
-        # apply the difference to the width
         result.x += diff
+    else:
+        result.x += bar_height.gap
     if result.y < bar_height.top:
-        # calculate the difference
         diff = bar_height.top - result.y
-        # apply the difference to the height
         result.y += diff
+    else:
+        result.y += bar_height.gap
 
     if result.x + result.width > screen_data.width - bar_height.right:
-        # calculate the difference
         diff = (result.x + result.width) - (screen_data.width - bar_height.right)
-        # apply the difference to the width
         result.width -= diff
+    else:
+        result.width -= bar_height.gap
 
     if result.y + result.height > screen_data.height - bar_height.bottom:
-        # calculate the difference
         diff = (result.y + result.height) - (screen_data.height - bar_height.bottom)
-        # apply the difference to the height
         result.height -= diff
+    else:
+        result.height -= bar_height.gap
 
     # always apply screen offsets
     result.x += screen_data.x
