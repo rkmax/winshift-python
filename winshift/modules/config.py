@@ -49,7 +49,7 @@ def _bar_height_from_dict(data: dict) -> BarHeight:
         bottom=data.get("bottom", 0),
         right=data.get("right", 0),
         left=data.get("left", 0),
-        gap=data.get("gap")
+        gap=data.get("gap", 0)
     )
 
 
